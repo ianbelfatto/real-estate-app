@@ -7,6 +7,4 @@ Rails.application.routes.draw do
   patch "/properties/:id" => "properties#update"
   delete "/properties/:id" => "properties#destroy"
 
-  get "properties/:id/coordinates" => "properties#coordinates"
-
 end

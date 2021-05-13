@@ -5,6 +5,7 @@ class PropertiesController < ApplicationController
   end
 
   def create
+    coordinates = Geocoder.coordinates(params[:address])
     property = Property.new(
       description: params[:description],
       year_built: params[:year_built],
@@ -12,11 +13,12 @@ class PropertiesController < ApplicationController
       bedrooms: params[:bedrooms],
       bathrooms: params[:bathrooms],
       availability: params[:availability],
-      address: params[:address],
-      price: params[:price]
+      price: params[:price],
+      latitude: coordinates[0],
+      longitude: coordinates[1]
     )
     property.save
-    render json: property
+    render json: property.as_json
   end
 
   def show
@@ -31,10 +33,10 @@ class PropertiesController < ApplicationController
     one_property.square_feet = params[:square_feet] || one_property.square_feet
     one_property.bedrooms = params[:bedrooms] || one_property.bedrooms
     one_property.bathrooms = params[:bathrooms] || one_property.bathrooms
-    one_property.availability = params[:availability] || one_property.availability
+    one_property.availability = params[:availability] || one_property.address = params[:address] || one_property.address
     one_property.price = params[:price] || one_property.price
     one_property.save
-    render json: one_property.as_json
+    render json: one_property
   end
 
   def destroy
